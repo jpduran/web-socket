@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>SocketIO Client</title>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <!-- File input and image output-->
+        <input type="file" id="input"/>
+        <image src="" id="output"/>
+
+        <!-- client code -->
+        <script type="text/javascript">
+
+            // Get Websocket
+            var socket = io();
+
+            // Get DOM elements
+            var room = 'test';
+            socket.emit("join", room);
+
+            // Listen to file input events
+            document.getElementById("input").addEventListener("change", function (event){
+                // Prepare file reader
+                var file = event.target.files[0];
+                var fileReader = new FileReader();
+
+                fileReader.onloadend = function(event) {
+                    // Send an image event to the socket
+                    var image = event.target.result
+                    output.src = image;
+                    socket.emit("image", image);
+                };
+
+                // Read file
+                fileReader.readAsDataURL(file);
+            })
+
+            socket.on("image", function (image) {
+                output.src = image;
+            });
+        
+        </script>
+
+    </body>
+</html>

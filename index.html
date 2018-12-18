@@ -13,12 +13,18 @@
         <!-- client code -->
         <script type="text/javascript">
 
+            var uuid4 = require('uuid4');
+
             // Get Websocket
             var socket = io();
 
             // Get DOM elements
-            var room = 'test';
-            socket.emit("join", room);
+            var room = uuid4();
+
+            if(uuid4.valid(room)){
+                socket.emit("join", room);
+            }
+           
 
             // Listen to file input events
             document.getElementById("input").addEventListener("change", function (event){

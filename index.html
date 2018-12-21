@@ -4,27 +4,24 @@
         <meta charset="utf-8">
         <title>SocketIO Client</title>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="http://davidshimjs.github.com/qrcodejs/qrcode.min.js"></script>
     </head>
     <body>
         <!-- File input and image output-->
         <input type="file" id="input"/>
         <image src="" id="output"/>
+        <p id="uuid"></p>
+        <div id="qrcode"></div>
 
         <!-- client code -->
         <script type="text/javascript">
 
-            var uuid4 = require('uuid4');
-
             // Get Websocket
             var socket = io();
+            var qrcode = new QRCode("qrcode");
 
             // Get DOM elements
-            var room = uuid4();
-
-            if(uuid4.valid(room)){
-                socket.emit("join", room);
-            }
-           
+            //var room = 'test';
 
             // Listen to file input events
             document.getElementById("input").addEventListener("change", function (event){
@@ -45,6 +42,12 @@
 
             socket.on("image", function (image) {
                 output.src = image;
+            });
+
+            socket.on("connected", function(uuid){
+                socket.emit("join", uuid);
+                document.getElementById("uuid").innerHTML = uuid;
+                qrcode.makeCode(uuid);
             });
         
         </script>

@@ -30,10 +30,18 @@ io.on("connection", function(socket) {
     socket.on("join", function (room) {
         // join channel provided by client
         socket.join(room)
-        
+
         socket.on("joined", function(msg){
             socket.broadcast.to(room).emit("joined", msg)
         });
+
+        socket.on("location", function(location){
+            socket.broadcast.to(room).emit("located", location)
+        })
+
+        socket.on("askLocation", function(){
+            socket.broadcast.to(room).emit("locationAsked")
+        })
         
         // Register "image" events, sent by the client
         socket.on("image", function(msg) {

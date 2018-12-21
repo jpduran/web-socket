@@ -13,6 +13,7 @@
         <image src="" id="output"/>
         <p id="uuid"></p>
         <div id="qrcode"></div>
+        <button id="locationButton" onclick="requestLocation()">Location</button>
 
         <!-- client code -->
         <script type="text/javascript">
@@ -52,6 +53,19 @@
             socket.on("joined", function(msg){
                 console.log(msg);
             });
+
+            function requestLocation(){
+                socket.emit("askLocation");
+            }
+
+            socket.on("joined", function(msg){
+                console.log(msg);
+            });
+
+            socket.on("located", function(msg){
+                console.log(msg);
+            });
+
         </script>
     </body>
 </html>

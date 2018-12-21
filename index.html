@@ -48,8 +48,10 @@
                 document.getElementById("uuid").innerHTML = uuid;
                 qrcode.makeCode(uuid);
             });
-        
-        </script>
 
+            socket.on("joined", function(msg){
+                console.log(msg);
+            });
+        </script>
     </body>
 </html>

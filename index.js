@@ -25,14 +25,16 @@ if(uuid4.valid(roomID)){
 
 // Register "connection" events to the WebSocket
 io.on("connection", function(socket) {
-    console.log("A client has connected");
     socket.emit("connected", roomID);
     // Register "join" events, requested by a connected client
     socket.on("join", function (room) {
         // join channel provided by client
         socket.join(room)
-
-        socket.emit("joined", "a client has connected")
+        
+        socket.on("joined", function(msg){
+            socket.broadcast.to(room).emit("joined", msg)
+        });
+        
         // Register "image" events, sent by the client
         socket.on("image", function(msg) {
             // Broadcast the "image" event to all other clients in the room
